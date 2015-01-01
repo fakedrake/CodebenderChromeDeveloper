@@ -1,0 +1,14 @@
+{
+    "name": "CodebenderDev",
+    "version": "0.1",
+    "manifest_version": 2,
+    "description": "Development of codebender.cc tools",
+    "background": {
+	"scripts": ["background.js"]
+    },
+    "permissions": [
+        "http://staging.codebender.cc/*",
+        "https://staging.codebender.cc/*",
+        "webRequest", "webRequestBlocking"
+    ]
+}
