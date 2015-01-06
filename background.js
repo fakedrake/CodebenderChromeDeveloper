@@ -3,14 +3,26 @@
 var urlMap = [
   {rx: /.*\/compilerflasher\.js/,
    redirect: "http://localhost:8080/bundles/chrome-client.js"},
+
   // Log silencer
   {rx: /.*\/logdb\/.*/,
-   redirect: "http://localhost:8080/"}
+   redirect: "http://localhost:8080/package.json",
+   valid: true},
+
+  {rx: /https?:\/\/tsiknas.codebender.cc.*/,
+   redirectCb: function (url) {
+     return url.replace("tsiknas", "staging");
+   },
+   valid: true
+  }
 ];
 
 // Mark url map entries that respond as valid.
 // XXX: maybe make this blocking.
 urlMap.forEach(function (ue) {
+  if (ue.valid)
+    return;
+
   var xhr = new XMLHttpRequest();
   xhr.onreadystatechange = function () {
     if (xhr.readyState == 4 &&
@@ -26,15 +38,16 @@ urlMap.forEach(function (ue) {
 chrome.webRequest.onBeforeRequest.addListener(
   function(details) {
     console.log("Requesting:",details.url);
-    for (var i=0; i<urlMap.length; i++)
-      if(urlMap[i].valid && urlMap[i].rx.test(details.url)){
-        console.log("Redirecting compiler flasher");
+    for (var i = 0; i < urlMap.length; i++)
+      if (urlMap[i].valid && urlMap[i].rx.test(details.url)) {
+        console.log("Redirecting " + details.url + " -> " +
+                    urlMap[i].redirect || urlMap[i].redirectCb(details.url));
         return {
-          redirectUrl: urlMap[i].redirect
+          redirectUrl: urlMap[i].redirect || urlMap[i].redirectCb(details.url)
         };
       }
   },
   {urls: [
-    "*://staging.codebender.cc/*",
+    "<all_urls>"
   ]},
   ["blocking"]);
