@@ -9,6 +9,13 @@ var urlMap = [
    redirect: "http://localhost:8080/package.json",
    valid: true},
 
+  {rx: /https?:\/\/localhost\/.*/,
+   redirectCb: function (url) {
+     return url.replace("://localhost", "://staging.codebender.cc");
+   },
+   valid: true
+  },
+
   {rx: /https?:\/\/tsiknas.codebender.cc.*/,
    redirectCb: function (url) {
      return url.replace("tsiknas", "staging");
