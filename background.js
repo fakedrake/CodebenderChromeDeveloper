@@ -1,8 +1,11 @@
 // redirects that do not respond will not be marked as valid. The
 // first `rx` to match a request will be redirected to `redirect`
 var urlMap = [
-  {rx: /.*\/compilerflasher\.js/,
+  {rx: /.*\/chrome-client\.js/,
    redirect: "http://localhost:8080/bundles/chrome-client.js"},
+
+  {rx: /.*\/compilerflasher\.js/,
+   redirect: "http://localhost:8080/bundles/compilerflasher.js"},
 
   // Log silencer
   {rx: /.*\/logdb\/.*/,
