@@ -1,11 +1,14 @@
 // redirects that do not respond will not be marked as valid. The
 // first `rx` to match a request will be redirected to `redirect`
 var urlMap = [
-  {rx: /.*\/chrome-client\.js/,
-   redirect: "http://localhost:8080/bundles/chrome-client.js"},
+  {
+    rx: /.*codebender.*\/chrome-client\.js.*/,
+    redirect: "http://localhost:8080/package.json",
+   valid: true},
 
-  {rx: /.*\/compilerflasher\.js/,
-   redirect: "http://localhost:8080/bundles/compilerflasher.js"},
+  {rx: /.*codebender.*\/compilerflasher(_new|)\.js/,
+   redirect: "http://localhost:8080/package.json",
+   valid: true},
 
   // Log silencer
   {rx: /.*\/logdb\/.*/,
@@ -14,7 +17,8 @@ var urlMap = [
 
   {rx: /https?:\/\/localhost\/.*/,
    redirectCb: function (url) {
-     return url.replace("://localhost", "://staging.codebender.cc");
+     return url.replace("http:", "https:")
+       .replace("://localhost", "://staging.codebender.cc");
    },
    valid: true
   },
