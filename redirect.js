@@ -1,35 +1,36 @@
 // redirects that do not respond will not be marked as valid. The
 // first `rx` to match a request will be redirected to `redirect`
-var urlMap = [
-  {
-    rx: /.*codebender.*\/chrome-client\.js.*/,
-    redirect: "http://localhost:8080/package.json",
-   valid: true},
+var nullurl = "http://example.com",
+    urlMap = [
+      {
+        rx: /.*codebender.*\/chrome-client\.js.*/,
+        redirect: nullurl,
+        valid: true},
 
-  {rx: /.*codebender.*\/compilerflasher(_new|)\.js/,
-   redirect: "http://localhost:8080/package.json",
-   valid: true},
+      {rx: /.*codebender.*\/compilerflasher(_new|)\.js/,
+       redirect: nullurl,
+       valid: true},
 
-  // Log silencer
-  {rx: /.*\/logdb\/.*/,
-   redirect: "http://localhost:8080/package.json",
-   valid: true},
+      // Log silencer
+      {rx: /.*\/logdb\/.*/,
+       redirect: nullurl,
+       valid: true},
 
-  {rx: /https?:\/\/localhost\/.*/,
-   redirectCb: function (url) {
-     return url.replace("http:", "https:")
-       .replace("://localhost", "://staging.codebender.cc");
-   },
-   valid: true
-  },
+      {rx: /https?:\/\/localhost\/.*/,
+       redirectCb: function (url) {
+         return url.replace("http:", "https:")
+           .replace("://localhost", "://staging.codebender.cc");
+       },
+       valid: true
+      },
 
-  {rx: /https?:\/\/tsiknas.codebender.cc.*/,
-   redirectCb: function (url) {
-     return url.replace("tsiknas", "staging");
-   },
-   valid: true
-  }
-];
+      {rx: /https?:\/\/tsiknas.codebender.cc.*/,
+       redirectCb: function (url) {
+         return url.replace("tsiknas", "staging");
+       },
+       valid: true
+      }
+    ];
 
 // Mark url map entries that respond as valid.
 // XXX: maybe make this blocking.
