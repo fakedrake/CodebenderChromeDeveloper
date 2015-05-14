@@ -66,3 +66,20 @@ chrome.webRequest.onBeforeRequest.addListener(
     "<all_urls>"
   ]},
   ["blocking"]);
+
+var apps = [];
+setInterval(function () {
+  chrome.management.getAll(function (a) {
+    apps = a;
+  });
+}, 5000);
+
+// Provide a list of apps
+chrome.runtime.onMessage.addListener(
+  function(message, sender, sendResponse) {
+    var send = sendResponse;
+    if(message.messageName == 'getAllApps') {
+      sendResponse(apps);
+    }
+  }
+);
