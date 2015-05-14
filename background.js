@@ -11,11 +11,6 @@ var nullurl = "http://example.com",
        redirect: nullurl,
        valid: true},
 
-      // Log silencer
-      {rx: /.*\/logdb\/.*/,
-       redirect: nullurl,
-       valid: true},
-
       {rx: /https?:\/\/localhost\/.*/,
        redirectCb: function (url) {
          return url.replace("http:", "https:")
