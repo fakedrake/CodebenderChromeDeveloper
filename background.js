@@ -68,11 +68,14 @@ chrome.webRequest.onBeforeRequest.addListener(
   ["blocking"]);
 
 var apps = [];
-setInterval(function () {
+function updateApps () {
   chrome.management.getAll(function (a) {
     apps = a;
   });
-}, 5000);
+}
+
+updateApps();
+setInterval(updateApps, 5000);
 
 // Provide a list of apps
 chrome.runtime.onMessage.addListener(
