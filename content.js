@@ -45,5 +45,5 @@ console.log("CBDev: Changing dom");
 mostRecentApp(function (app) {
   injectAppId(app.id);
 });
-injectScript( chrome.extension.getURL("bundles/compilerflasher.js"), 'body');
-injectScript( chrome.extension.getURL("bundles/chrome-client.js"), 'body');
+// injectScript( chrome.extension.getURL("bundles/compilerflasher.js"), 'body');
+injectScript( chrome.extension.getURL("bundles/chrome-client.js"), 'head');

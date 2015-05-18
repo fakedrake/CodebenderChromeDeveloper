@@ -1,15 +1,11 @@
 // redirects that do not respond will not be marked as valid. The
 // first `rx` to match a request will be redirected to `redirect`
-var nullurl = "http://example.com",
+var nullurl = chrome.extension.getURL("bundles/blank.js"),
     urlMap = [
       {
         rx: /.*codebender.*\/chrome-client\.js.*/,
         redirect: nullurl,
         valid: true},
-
-      {rx: /.*codebender.*\/compilerflasher(_new|)\.js/,
-       redirect: nullurl,
-       valid: true},
 
       {rx: /https?:\/\/localhost\/.*/,
        redirectCb: function (url) {
