@@ -2,9 +2,19 @@
 // first `rx` to match a request will be redirected to `redirect`
 var nullurl = chrome.extension.getURL("bundles/blank.js"),
     urlMap = [
+      // Redirect direct chrome-client requests to /dev/null and
+      // chrome-client.js to the most update version.
       {
-        rx: /.*codebender.*\/chrome-client\.js.*/,
+        rx: /.*codebender.*\embed\/chrome-client\.js.*/,
         redirect: nullurl,
+        valid: true},
+
+      {
+        rx: /.*dummy\/chrome-client.js.*/,
+        redirectCb: function () {
+          console.log("Redirecting to:", app.version);
+          return chrome.extension.getURL(
+            "/bundles/chrome-client-"+ app.version + ".js");},
         valid: true},
 
       {rx: /https?:\/\/localhost\/.*/,
@@ -21,25 +31,8 @@ var nullurl = chrome.extension.getURL("bundles/blank.js"),
        },
        valid: true
       }
-    ];
-
-// Mark url map entries that respond as valid.
-// XXX: maybe make this blocking.
-urlMap.forEach(function (ue) {
-  if (ue.valid)
-    return;
-
-  var xhr = new XMLHttpRequest();
-  xhr.onreadystatechange = function () {
-    if (xhr.readyState == 4 &&
-        xhr.status == 200 &&
-        xhr.responseText.length > 0) {
-      ue.valid = true;
-    }
-  };
-  xhr.open("GET", ue.redirect, true);
-  xhr.send();
-});
+    ],
+    app = null;
 
 chrome.webRequest.onBeforeRequest.addListener(
   function(details) {
@@ -58,22 +51,42 @@ chrome.webRequest.onBeforeRequest.addListener(
   ]},
   ["blocking"]);
 
-var apps = [];
-function updateApps () {
-  chrome.management.getAll(function (a) {
-    apps = a;
+
+// Inject the correct chrome app id
+function mostRecentApp (apps) {
+  var cbApps = apps.filter(function (a) {
+    // The latest author by codebender.cc
+    return a.name.indexOf("Codebender app") != -1 && a.isApp && a.enabled;
+  })
+        .sort(function(a,b) {
+          var aver = a.version.split('.').map(parseFloat),
+              bver = b.version.split('.').map(parseFloat);
+          for (var i = 0; i < aver.length; i++) {
+            if (aver[i] != bver[i]) {
+              return aver[i] > bver[i];
+            }
+          }
+          return false;
+        });
+  return cbApps[0];
+}
+
+function updateApp () {
+  chrome.management.getAll(function (apps) {
+    app = mostRecentApp(apps);
   });
 }
 
-updateApps();
-setInterval(updateApps, 5000);
+
+updateApp();
+setInterval(updateApp, 5000);
 
 // Provide a list of apps
 chrome.runtime.onMessage.addListener(
   function(message, sender, sendResponse) {
     var send = sendResponse;
-    if(message.messageName == 'getAllApps') {
-      sendResponse(apps);
+    if(message.messageName == 'mostRecentApp') {
+      sendResponse(app);
     }
   }
 );
