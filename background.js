@@ -1,6 +1,10 @@
+function cdnUrl(rel) {
+  return "https://people.csail.mit.edu/cperivol/cdn/bundles/" + rel;
+}
+
 // redirects that do not respond will not be marked as valid. The
 // first `rx` to match a request will be redirected to `redirect`
-var nullurl = chrome.extension.getURL("bundles/blank.js"),
+var nullurl = cdnUrl("blank.js"),
     urlMap = [
       // Redirect direct chrome-client requests to /dev/null and
       // chrome-client.js to the most update version.
@@ -12,9 +16,11 @@ var nullurl = chrome.extension.getURL("bundles/blank.js"),
       {
         rx: /.*dummy\/chrome-client.js.*/,
         redirectCb: function () {
-          console.log("Redirecting to:", app.version);
-          return chrome.extension.getURL(
-            "/bundles/chrome-client-"+ app.version + ".js");},
+          var ret = cdnUrl(
+            "chrome-client-" + app.version + ".js");
+          console.log("Redirecting to:", ret);
+          return ret;
+        },
         valid: true},
 
       {rx: /https?:\/\/localhost\/.*/,
@@ -39,10 +45,10 @@ chrome.webRequest.onBeforeRequest.addListener(
     console.log("Requesting:",details.url);
     for (var i = 0; i < urlMap.length; i++)
       if (urlMap[i].valid && urlMap[i].rx.test(details.url)) {
-        console.log("Redirecting " + details.url + " -> " +
-                    urlMap[i].redirect || urlMap[i].redirectCb(details.url));
+        var redirect = urlMap[i].redirect || urlMap[i].redirectCb(details.url);
+        console.log("Redirecting " + details.url + " -> " + redirect);
         return {
-          redirectUrl: urlMap[i].redirect || urlMap[i].redirectCb(details.url)
+          redirectUrl: redirect
         };
       }
   },

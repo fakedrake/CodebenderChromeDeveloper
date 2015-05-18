@@ -33,4 +33,4 @@ mostRecentApp(function (app) {
   injectAppId(app.id);
 });
 // injectScript( chrome.extension.getURL("bundles/compilerflasher.js"), 'body');
-injectScript("http://staging.codebender.cc/dummy/chrome-client.js", 'head');
+injectScript("https://staging.codebender.cc/dummy/chrome-client.js", 'head');

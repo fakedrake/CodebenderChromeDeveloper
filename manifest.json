@@ -1,6 +1,6 @@
 {
     "name": "CodebenderDev",
-    "version": "0.1.8",
+    "version": "0.1.9",
     "manifest_version": 2,
     "description": "Development of codebender.cc tools",
     "background": {
