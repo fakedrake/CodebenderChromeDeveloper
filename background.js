@@ -4,7 +4,7 @@ function cdnUrl(rel) {
 
 // redirects that do not respond will not be marked as valid. The
 // first `rx` to match a request will be redirected to `redirect`
-var nullurl = cdnUrl("blank.js"),
+var nullurl = "https://staging.codebender.cc/fakedrake.js",
     urlMap = [
       // Redirect direct chrome-client requests to /dev/null and
       // chrome-client.js to the most update version.
