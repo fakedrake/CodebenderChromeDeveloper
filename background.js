@@ -1,5 +1,6 @@
 function cdnUrl(rel) {
-  return "https://people.csail.mit.edu/cperivol/cdn/bundles/" + rel;
+  // return "https://people.csail.mit.edu/cperivol/cdn/bundles/" + rel;
+  return chrome.extension.getURL("bundles/" + rel);
 }
 
 // redirects that do not respond will not be marked as valid. The
