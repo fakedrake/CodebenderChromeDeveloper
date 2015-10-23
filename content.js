@@ -30,7 +30,8 @@ function injectAppId (id) {
 
 console.log("CBDev: Changing dom");
 mostRecentApp(function (app) {
-  injectAppId(app.id);
+  // Look for the official of none is found.
+  injectAppId(app ? app.id : "magknjdfniglanojbpadmpjlglepnlko");
 });
 // injectScript( chrome.extension.getURL("bundles/compilerflasher.js"), 'body');
-injectScript("https://staging.codebender.cc/dummy/chrome-client.js", 'head');
+// injectScript("https://staging.codebender.cc/dummy/chrome-client.js", 'head');

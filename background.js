@@ -9,22 +9,27 @@ var nullurl = "https://staging.codebender.cc/fakedrake.js",
     urlMap = [
       // Redirect direct chrome-client requests to /dev/null and
       // chrome-client.js to the most update version.
+      // {
+      //   rx: /.*codebender.*\embed\/chrome-client\.js.*/,
+      //   redirect: nullurl,
+      //   valid: true},
       {
-        rx: /.*codebender.*\embed\/chrome-client\.js.*/,
-        redirect: nullurl,
-        valid: true},
+        rx: /.*codebender.*\embed\/compilerflasher.*\.js.*/,
+        redirect: cdnUrl('compilerflasher.js'),
+        valid: true
+      },
 
       {
-        rx: /.*dummy\/chrome-client.js.*/,
+        rx: /.*\/chrome-client.js.*/,
         redirectCb: function () {
           var ret = cdnUrl(
-            "chrome-client-" + app.version + ".js");
+            "chrome-client.js");
           console.log("Redirecting to:", ret);
           return ret;
         },
         valid: true},
 
-      {rx: /https?:\/\/localhost\/.*/,
+      {rx: /.*:\/\/localhost\/.*/,
        redirectCb: function (url) {
          return url.replace("http:", "https:")
            .replace("://localhost", "://staging.codebender.cc");
